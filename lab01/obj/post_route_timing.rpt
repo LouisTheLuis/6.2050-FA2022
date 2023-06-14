@@ -1,0 +1,116 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
+| Date         : Mon Sep 12 17:40:22 2022
+| Host         : EECS-DIGITAL-14 running 64-bit Ubuntu 20.04.5 LTS
+| Command      : report_timing -file obj/post_route_timing.rpt
+| Design       : top_level
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack:                    inf
+  Source:                 sw[1]
+                            (input port)
+  Destination:            led[2]
+                            (output port)
+  Path Group:             (none)
+  Path Type:              Max at Slow Process Corner
+  Data Path Delay:        31.052ns  (logic 13.320ns (42.897%)  route 17.732ns (57.103%))
+  Logic Levels:           32  (CARRY4=19 IBUF=1 LUT2=1 LUT3=5 LUT4=1 LUT5=1 LUT6=2 MUXF7=1 OBUF=1)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+    L16                                               0.000     0.000 f  sw[1] (IN)
+                         net (fo=0)                   0.000     0.000    sw[1]
+    L16                  IBUF (Prop_ibuf_I_O)         1.480     1.480 f  sw_IBUF[1]_inst/O
+                         net (fo=50, routed)          2.268     3.747    changes/sw_IBUF[1]
+    SLICE_X2Y72          LUT6 (Prop_lut6_I4_O)        0.124     3.871 f  changes/res_out0__122_carry_i_9/O
+                         net (fo=9, routed)           0.311     4.183    changes/res_out0__122_carry_i_9_n_0
+    SLICE_X2Y72          LUT4 (Prop_lut4_I2_O)        0.124     4.307 r  changes/res_out0__122_carry_i_1/O
+                         net (fo=22, routed)          1.339     5.645    changes/res_out0__122_carry_i_1_n_0
+    SLICE_X4Y72          LUT2 (Prop_lut2_I1_O)        0.124     5.769 r  changes/res_out0__122_carry_i_2/O
+                         net (fo=2, routed)           0.422     6.191    changes/res_out0__122_carry_i_2_n_0
+    SLICE_X5Y72          CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385     6.576 r  changes/res_out0__121_carry/CO[3]
+                         net (fo=1, routed)           0.000     6.576    changes/res_out0__121_carry_n_0
+    SLICE_X5Y73          CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     6.690 r  changes/res_out0__121_carry__0/CO[3]
+                         net (fo=1, routed)           0.000     6.690    changes/res_out0__121_carry__0_n_0
+    SLICE_X5Y74          CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271     6.961 r  changes/res_out0__121_carry__1/CO[0]
+                         net (fo=11, routed)          1.082     8.043    changes/res_out0__121_carry__1_n_3
+    SLICE_X6Y71          CARRY4 (Prop_carry4_CYINIT_CO[3])
+                                                      0.844     8.887 r  changes/res_out_inferred_i_190/CO[3]
+                         net (fo=1, routed)           0.000     8.887    changes/res_out_inferred_i_190_n_0
+    SLICE_X6Y72          CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     9.004 r  changes/res_out_inferred_i_187/CO[3]
+                         net (fo=1, routed)           0.000     9.004    changes/res_out_inferred_i_187_n_0
+    SLICE_X6Y73          CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157     9.161 r  changes/res_out_inferred_i_186/CO[1]
+                         net (fo=11, routed)          1.179    10.340    changes_n_25
+    SLICE_X7Y70          LUT3 (Prop_lut3_I0_O)        0.332    10.672 r  res_out_inferred_i_195/O
+                         net (fo=1, routed)           0.000    10.672    res_out_inferred_i_195_n_0
+    SLICE_X7Y70          CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401    11.073 r  res_out_inferred_i_178/CO[3]
+                         net (fo=1, routed)           0.000    11.073    res_out_inferred_i_178_n_0
+    SLICE_X7Y71          CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.187 r  res_out_inferred_i_175/CO[3]
+                         net (fo=1, routed)           0.000    11.187    res_out_inferred_i_175_n_0
+    SLICE_X7Y72          CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    11.344 r  res_out_inferred_i_174/CO[1]
+                         net (fo=11, routed)          1.431    12.775    res_out_inferred_i_174_n_2
+    SLICE_X9Y69          LUT3 (Prop_lut3_I0_O)        0.329    13.104 r  res_out_inferred_i_181/O
+                         net (fo=1, routed)           0.000    13.104    res_out_inferred_i_181_n_0
+    SLICE_X9Y69          CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    13.654 r  res_out_inferred_i_143/CO[3]
+                         net (fo=1, routed)           0.000    13.654    res_out_inferred_i_143_n_0
+    SLICE_X9Y70          CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    13.811 r  res_out_inferred_i_142/CO[1]
+                         net (fo=11, routed)          1.218    15.030    res_out_inferred_i_142_n_2
+    SLICE_X8Y68          LUT3 (Prop_lut3_I0_O)        0.329    15.359 r  res_out_inferred_i_149/O
+                         net (fo=1, routed)           0.000    15.359    res_out_inferred_i_149_n_0
+    SLICE_X8Y68          CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533    15.892 r  res_out_inferred_i_101/CO[3]
+                         net (fo=1, routed)           0.000    15.892    res_out_inferred_i_101_n_0
+    SLICE_X8Y69          CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    16.049 r  res_out_inferred_i_100/CO[1]
+                         net (fo=11, routed)          1.489    17.538    res_out_inferred_i_100_n_2
+    SLICE_X8Y64          LUT3 (Prop_lut3_I0_O)        0.332    17.870 r  res_out_inferred_i_109/O
+                         net (fo=1, routed)           0.000    17.870    res_out_inferred_i_109_n_0
+    SLICE_X8Y64          CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    18.246 r  res_out_inferred_i_71/CO[3]
+                         net (fo=1, routed)           0.000    18.246    res_out_inferred_i_71_n_0
+    SLICE_X8Y65          CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    18.363 r  res_out_inferred_i_65/CO[3]
+                         net (fo=1, routed)           0.000    18.363    res_out_inferred_i_65_n_0
+    SLICE_X8Y66          CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    18.520 r  res_out_inferred_i_64/CO[1]
+                         net (fo=11, routed)          1.387    19.907    changes/res_out_inferred_i_42_0[0]
+    SLICE_X6Y63          LUT3 (Prop_lut3_I0_O)        0.332    20.239 r  changes/res_out_inferred_i_99/O
+                         net (fo=1, routed)           0.000    20.239    changes/res_out_inferred_i_99_n_0
+    SLICE_X6Y63          CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533    20.772 r  changes/res_out_inferred_i_59/CO[3]
+                         net (fo=1, routed)           0.000    20.772    changes/res_out_inferred_i_59_n_0
+    SLICE_X6Y64          CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    20.889 r  changes/res_out_inferred_i_47/CO[3]
+                         net (fo=1, routed)           0.000    20.889    changes/res_out_inferred_i_47_n_0
+    SLICE_X6Y65          CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    21.046 r  changes/res_out_inferred_i_42/CO[1]
+                         net (fo=8, routed)           1.651    22.697    changes/res_out_inferred_i_42_n_2
+    SLICE_X2Y62          LUT6 (Prop_lut6_I2_O)        0.332    23.029 r  changes/res_out_inferred_i_55/O
+                         net (fo=1, routed)           0.651    23.680    changes/res_out_inferred_i_55_n_0
+    SLICE_X1Y67          LUT5 (Prop_lut5_I4_O)        0.124    23.804 r  changes/res_out_inferred_i_36/O
+                         net (fo=1, routed)           0.000    23.804    changes/res_out_inferred_i_36_n_0
+    SLICE_X1Y67          MUXF7 (Prop_muxf7_I1_O)      0.217    24.021 r  changes/res_out_inferred_i_14/O
+                         net (fo=1, routed)           3.303    27.324    res_out[2]
+    J13                  OBUF (Prop_obuf_I_O)         3.728    31.052 r  led_OBUF[2]_inst/O
+                         net (fo=0)                   0.000    31.052    led[2]
+    J13                                                               r  led[2] (OUT)
+  -------------------------------------------------------------------    -------------------
+
+
+
+

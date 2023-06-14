@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Mon Sep 12 17:26:36 2022
+# Process ID: 34009
+# Current directory: /home/builder/FPGA/lab01
+# Command line: vivado -mode batch -source build.tcl
+# Log file: /home/builder/FPGA/lab01/vivado.log
+# Journal file: /home/builder/FPGA/lab01/vivado.jou
+# Running On: EECS-DIGITAL-14, OS: Linux, CPU Frequency: 3615.026 MHz, CPU Physical cores: 4, Host memory: 8225 MB
+#-----------------------------------------------------------
+source build.tcl

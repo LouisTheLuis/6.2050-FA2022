@@ -1,0 +1,120 @@
+`timescale 1ns / 1ps
+`default_nettype none
+
+module pong_game (
+  input wire pixel_clk_in,
+  input wire rst_in,
+  input wire up_in,
+  input wire down_in,
+  input wire [3:0] pspeed_in,
+
+  input wire [10:0] hcount_in,
+  input wire [9:0]  vcount_in,
+  input wire [2:0] alpha_in,
+  input wire image_set_in,
+
+  output logic [11:0] pixel_out
+  );
+
+  // Here we will contain the sprites for the paddle, the puck, and the white
+  // background
+  logic [11:0] paddlesp, pucksp, whitesp;
+
+  // Initial positions
+  logic [10:0] paddle_ix = 0; logic [9:0] paddle_iy = 0;
+  logic [10:0] puck_ix = 300; logic [9:0] puck_iy = 300;
+  logic [10:0] white_ix = 447; logic [9:0] white_iy = 319;
+
+  // Actual positions
+  logic [10:0] paddle_x; logic [9:0] paddle_y;
+  logic [10:0] puck_x; logic [9:0] puck_y;
+  logic [10:0] white_x; logic [9:0] white_y;
+  // Direction vector for puck
+  logic [1:0] puck_dir;
+
+  // Sprites
+  block_sprite #(.WIDTH(16), .HEIGHT(128), .COLOR(12'hF00)) paddle (.x_in(paddle_x), .hcount_in(hcount_in), .y_in(paddle_y), .vcount_in(vcount_in), .pixel_out(paddlesp));
+  block_sprite #(.WIDTH(128), .HEIGHT(128), .COLOR(12'h0F0)) puck (.x_in(puck_x), .hcount_in(hcount_in), .y_in(puck_y), .vcount_in(vcount_in), .pixel_out(pucksp));  
+  block_sprite #(.WIDTH(128), .HEIGHT(128), .COLOR(12'hFFF)) white (.x_in(white_x), .hcount_in(hcount_in), .y_in(white_y), .vcount_in(vcount_in), .pixel_out(whitesp));
+
+  // Frame Counter
+  logic [3:0] frame;
+
+  // Game switch (on/off)
+  logic switch;
+
+  always_ff @(posedge pixel_clk_in) begin
+	
+	// When hit the reset button, set all the positions to the initial positions
+	if (rst_in) begin
+		paddle_x <= paddle_ix; paddle_y <= paddle_iy;
+		puck_x <= puck_ix; puck_y <= puck_iy;
+		white_x <= white_ix; white_y <= white_iy;
+		frame <= 0;
+		switch <= 1;
+		
+		// Start moving the puck
+		puck_dir <= 2'b11;
+		
+        // The game logic goes here 
+	end else if (switch) begin
+		
+	  	// Find frame and count
+		if (hcount_in == 1023 && vcount_in == 767) begin
+			if (frame < 4) begin
+				frame <= frame + 1;
+			end
+		end 
+
+		// Whenever 4 frames pass... 
+		if (frame == 4) begin
+			frame <= 0;
+
+			// Move the paddle
+			if (up_in) begin
+				if (paddle_y > 0) begin
+					paddle_y <= paddle_y - 4;
+				end
+		        end
+			if (down_in) begin
+				if (paddle_y < 639) begin
+					paddle_y <= paddle_y + 4;
+				end
+		   	end
+
+			// Movement of the puck
+			/* THREE CASES: 
+			 * 1. None of the coordinates are limits
+			 * 2. The puck is hitting the paddle
+			 * 3. The puck is hitting limits (end or bounce)
+			*/
+			if (((puck_x > 0 && puck_x < 895) && (puck_y > 0 && puck_y < 639)) && !(puck_x <= 16 && (puck_y >= paddle_y || puck_y <= paddle_y + 127 || puck_y + 127 >= paddle_y || puck_y + 127 <= paddle_y + 127))) begin // Move by inertia
+				puck_x <= puck_x + pspeed_in * ((1*puck_dir[1]) - (1*~puck_dir[1]));
+				puck_y <= puck_y + pspeed_in * ((1*puck_dir[0]) - (1*~puck_dir[0]));
+			end else if (puck_x <= 16 && (puck_y >= paddle_y || puck_y <= paddle_y + 127 || puck_y + 127 >= paddle_y || puck_y + 127 <= paddle_y + 127)) begin // Hit the paddle
+				puck_dir <= {~puck_dir[1], puck_dir[0]};
+				puck_x <= puck_x + pspeed_in * ((1*~puck_dir[1]) - (1*puck_dir[1]));
+				puck_y <= puck_y + pspeed_in * ((1*puck_dir[0]) - (1*~puck_dir[0]));
+			end else if (puck_x > 0) begin // Bounce
+				if (puck_y < 0 || puck_y > 639) begin
+					puck_dir <= {puck_dir[1], ~puck_dir[0]};
+					puck_x <= puck_x + pspeed_in * ((1*puck_dir[1]) - (1*~puck_dir[1]));
+					puck_y <= puck_y + pspeed_in * ((1*~puck_dir[0]) - (1*puck_dir[0]));
+				end else begin
+					puck_dir <= {~puck_dir[1], puck_dir[0]};
+					puck_x <= puck_x + pspeed_in * ((1*~puck_dir[1]) - (1*puck_dir[1]));
+					puck_y <= puck_y + pspeed_in * ((1*puck_dir[0]) - (1*~puck_dir[0]));
+				end
+			end else begin
+				switch <= 0; // End of the game
+			end
+	        end 
+	end
+  end
+
+  assign pixel_out = paddlesp ^ pucksp ^ whitesp;
+
+endmodule
+
+
+`default_nettype wire

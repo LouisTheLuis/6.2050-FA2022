@@ -1,0 +1,77 @@
+module ps2_decoder( input wire clk_in,
+  input wire rst_in,
+  input wire ps_data_in,
+  input wire ps_clk_in,
+  output logic [7:0] code_out,
+  output logic code_valid_out
+);
+    logic in_process; // This variable exists for the valid single falling edge
+    logic [3:0] counter; // This counter exists to track the sending of data
+    logic old; // This exists for edge detection
+    logic swi; // Checks if we can or cannot send data
+
+    /* 
+    * EDGE DETECTOR BLOCK
+    */
+    always_ff @(posedge clk_in) begin
+	if (rst_in) begin
+		old <= 1;
+	end else begin
+		if (!ps_clk_in && ps_clk_in != old) begin
+			in_process <= 1;
+			old <= 0;
+		end else if (ps_clk_in && ps_clk_in != old) begin
+			old <= 1;
+		end else begin
+			in_process <= 0;
+		end
+	end
+    end
+
+    always_ff @(posedge clk_in) begin
+	// If we start, we set the old_clk_ps as default to 0
+        if (rst_in) begin
+		code_out <= 8'b0000_0000;
+		code_valid_out <= 0;
+		counter <= 1'b0;
+		swi <= 0;
+	end else begin
+		// If it's the first falling edge, start the counter and the
+		// data sending
+		if (counter == 0 && in_process) begin
+			swi <= 1;
+			counter <= counter + 1;
+		end
+
+		/*
+		* When we are allowed to send data
+		*/
+		if (swi) begin
+			// We only do stuff when encountering the falling edge
+			// of the clock
+			if (in_process) begin
+				counter <= counter + 1;
+				// We do not take data from Parity or Stop
+				if (counter != 9 && counter != 10) begin
+					code_out <= {code_out[6:0], ~ps_data_in};
+				end else if (counter == 9) begin
+					if (~ps_data_in != (^code_out)) begin
+						swi <= 0;
+						counter <= 1'b0;
+					end
+				end else if (counter == 10) begin
+					swi <= 0;
+					code_valid_out <= 1;
+				end
+			end
+		end
+
+		// This should remain high only for one cycle of the system
+		// clock
+		if (code_valid_out) begin
+			code_valid_out <= 0;
+			counter <= 1'b0;
+		end
+	end
+    end
+endmodule
